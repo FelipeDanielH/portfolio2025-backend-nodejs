@@ -1,0 +1,76 @@
+openapi: 3.1.0
+info:
+  title: API Portafolio Backend
+  description: Documentación del endpoint /home para la sección Hero
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:4000
+
+paths:
+  /home:
+    get:
+      summary: Obtener información de inicio
+      responses:
+        '200':
+          description: Información de inicio
+    post:
+      summary: Crear información de inicio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Home'
+      responses:
+        '201':
+          description: Creado exitosamente
+        '400':
+          description: Ya existe o error de validación
+    put:
+      summary: Actualizar información de inicio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Home'
+      responses:
+        '200':
+          description: Actualizado
+        '404':
+          description: No encontrado
+    delete:
+      summary: Eliminar información de inicio
+      responses:
+        '200':
+          description: Eliminado correctamente
+        '404':
+          description: No encontrado
+
+components:
+  schemas:
+    Home:
+      type: object
+      properties:
+        name:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        image:
+          type: string
+        links:
+          type: object
+          properties:
+            linkedin:
+              type: string
+            github:
+              type: string
+            portfolio:
+              type: string
+      required:
+        - name
+        - title
+        - description
