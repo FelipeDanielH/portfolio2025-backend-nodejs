@@ -1,3 +1,13 @@
 node_modules
 dist
 .env
+
+# Cobertura de pruebas
+coverage/
+
+# Archivos de caché de IDE
+.vscode/
+.idea/
+
+# Reportes de prueba temporales
+jest-output.json
