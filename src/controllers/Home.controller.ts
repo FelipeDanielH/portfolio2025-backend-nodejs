@@ -12,6 +12,11 @@ export const getHome = async (_req: Request, res: Response) => {
   }
 };
 
+// ========= simulacion de error =================
+/* export const getHome = async (_req: Request, res: Response) => {
+  throw new Error('Simulación de error del servidor');
+}; */
+
 // Crear un nuevo documento
 export const createHome = async (req: Request, res: Response) => {
   try {
