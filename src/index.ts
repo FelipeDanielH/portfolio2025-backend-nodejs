@@ -1,3 +1,5 @@
+// src/index.ts
+
 import express from 'express';
 import dotenv from 'dotenv';
 import { connectDB } from './config/db';
@@ -6,6 +8,8 @@ import { notFoundHandler } from './middlewares/notFoundHandler';
 import { errorHandler } from './middlewares/errorHandler';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs';
+import cors from 'cors';
+import { corsOptions } from './config/cors'; // 👈 Importas tu configuración
 
 dotenv.config();
 connectDB();
@@ -13,6 +17,7 @@ connectDB();
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+app.use(cors(corsOptions)); // 👈 Aquí se aplica CORS antes de las rutas
 app.use(express.json());
 
 // 🚨 Swagger debe ir antes de notFoundHandler
