@@ -8,8 +8,8 @@ export class HomeAboutRepositoryImpl implements HomeAboutRepository {
     return doc ? new HomeAboutEntity(doc.toObject()) : null;
   }
 
-  async update(data: { about: string[] }): Promise<HomeAboutEntity | null> {
-    const doc = await HomeAboutModel.findOneAndUpdate({}, data, { new: true, upsert: true });
-    return doc ? new HomeAboutEntity(doc.toObject()) : null;
+  async update(about: HomeAboutProps['about']): Promise<HomeAboutEntity> {
+    const doc = await HomeAboutModel.findOneAndUpdate({}, { about }, { new: true, upsert: true });
+    return new HomeAboutEntity(doc!.toObject());
   }
 } 

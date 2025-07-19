@@ -13,12 +13,18 @@ export class HomeAboutController {
   }
 
   static async update(req: Request, res: Response) {
-    // Validar que los IDs existan en la colección about
     const { about } = req.body;
     if (!Array.isArray(about)) return res.status(400).json({ message: 'El campo about debe ser un array de IDs.' });
-    const count = await AboutModel.countDocuments({ _id: { $in: about } });
-    if (count !== about.length) return res.status(400).json({ message: 'Uno o más IDs de about no existen.' });
-    const updated = await updateHomeAbout(repo, about);
-    res.json({ about: updated ? updated.props.about : [] });
+    // Buscar los about y crear snapshots
+    const found = await AboutModel.find({ _id: { $in: about } });
+    if (found.length !== about.length) return res.status(400).json({ message: 'Uno o más IDs de about no existen.' });
+    const snapshots = found.map(a => ({
+      _id: String((a._id as any)),
+      titulo: a.titulo,
+      descripcion: a.descripcion,
+      orden: a.orden
+    }));
+    const updated = await updateHomeAbout(repo, snapshots);
+    res.json({ about: updated.props.about });
   }
 } 
