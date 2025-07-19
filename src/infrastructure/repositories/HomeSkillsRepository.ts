@@ -5,11 +5,11 @@ import { HomeSkillsModel } from '../models/HomeSkills.model';
 export class HomeSkillsRepositoryImpl implements HomeSkillsRepository {
   async get(): Promise<HomeSkillsEntity | null> {
     const doc = await HomeSkillsModel.findOne();
-    return doc ? new HomeSkillsEntity(doc.toObject()) : null;
+    return doc ? new HomeSkillsEntity({ ...doc.toObject(), _id: String(doc._id) }) : null;
   }
 
   async update(skills: string[]): Promise<HomeSkillsEntity> {
     const doc = await HomeSkillsModel.findOneAndUpdate({}, { skills }, { new: true, upsert: true });
-    return new HomeSkillsEntity(doc!.toObject());
+    return new HomeSkillsEntity({ ...doc.toObject(), _id: String(doc._id) });
   }
 } 

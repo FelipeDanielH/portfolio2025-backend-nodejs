@@ -5,11 +5,11 @@ import { HomeEducationModel } from '../models/HomeEducation.model';
 export class HomeEducationRepositoryImpl implements HomeEducationRepository {
   async get(): Promise<HomeEducationEntity | null> {
     const doc = await HomeEducationModel.findOne();
-    return doc ? new HomeEducationEntity(doc.toObject()) : null;
+    return doc ? new HomeEducationEntity({ ...doc.toObject(), _id: String(doc._id) }) : null;
   }
 
   async update(education: HomeEducationProps['education']): Promise<HomeEducationEntity> {
     const doc = await HomeEducationModel.findOneAndUpdate({}, { education }, { new: true, upsert: true });
-    return new HomeEducationEntity(doc!.toObject());
+    return new HomeEducationEntity({ ...doc.toObject(), _id: String(doc._id) });
   }
 } 

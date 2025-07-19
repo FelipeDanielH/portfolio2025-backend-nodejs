@@ -5,11 +5,11 @@ import { HomeProjectsModel } from '../models/HomeProjects.model';
 export class HomeProjectsRepositoryImpl implements HomeProjectsRepository {
   async get(): Promise<HomeProjectsEntity | null> {
     const doc = await HomeProjectsModel.findOne();
-    return doc ? new HomeProjectsEntity(doc.toObject()) : null;
+    return doc ? new HomeProjectsEntity({ ...doc.toObject(), _id: String(doc._id) }) : null;
   }
 
   async update(projects: HomeProjectsProps['projects']): Promise<HomeProjectsEntity> {
     const doc = await HomeProjectsModel.findOneAndUpdate({}, { projects }, { new: true, upsert: true });
-    return new HomeProjectsEntity(doc!.toObject());
+    return new HomeProjectsEntity({ ...doc.toObject(), _id: String(doc._id) });
   }
 } 

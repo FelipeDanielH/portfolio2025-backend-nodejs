@@ -5,11 +5,11 @@ import { HomeContactModel } from '../models/HomeContact.model';
 export class HomeContactRepositoryImpl implements HomeContactRepository {
   async get(): Promise<HomeContactEntity | null> {
     const doc = await HomeContactModel.findOne();
-    return doc ? new HomeContactEntity(doc.toObject()) : null;
+    return doc ? new HomeContactEntity({ ...doc.toObject(), _id: String(doc._id) }) : null;
   }
 
   async update(data: HomeContactProps): Promise<HomeContactEntity> {
     const doc = await HomeContactModel.findOneAndUpdate({}, data, { new: true, upsert: true });
-    return new HomeContactEntity(doc!.toObject());
+    return new HomeContactEntity({ ...doc.toObject(), _id: String(doc._id) });
   }
 } 

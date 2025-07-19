@@ -5,11 +5,11 @@ import { HomeHeroModel } from '../models/HomeHero.model';
 export class HomeHeroRepositoryImpl implements HomeHeroRepository {
   async get(): Promise<HomeHeroEntity | null> {
     const doc = await HomeHeroModel.findOne();
-    return doc ? new HomeHeroEntity(doc.toObject()) : null;
+    return doc ? new HomeHeroEntity({ ...doc.toObject(), _id: String(doc._id) }) : null;
   }
 
   async update(data: HomeHeroProps): Promise<HomeHeroEntity> {
     const doc = await HomeHeroModel.findOneAndUpdate({}, data, { new: true, upsert: true });
-    return new HomeHeroEntity(doc!.toObject());
+    return new HomeHeroEntity({ ...doc.toObject(), _id: String(doc._id) });
   }
 } 
