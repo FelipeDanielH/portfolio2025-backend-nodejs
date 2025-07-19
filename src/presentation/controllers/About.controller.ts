@@ -4,7 +4,6 @@ import { getAbout } from '../../application/use-cases/about/getAbout';
 import { createAbout } from '../../application/use-cases/about/createAbout';
 import { updateAbout } from '../../application/use-cases/about/updateAbout';
 import { deleteAbout } from '../../application/use-cases/about/deleteAbout';
-import { AboutModel } from '../../infrastructure/models/About.model';
 
 const repo = new AboutRepositoryImpl();
 
@@ -30,11 +29,6 @@ export class AboutController {
 
   static async create(req: Request, res: Response) {
     const dto: AboutRequestDTO = req.body;
-    // Validar unicidad de 'orden'
-    const exists = await AboutModel.findOne({ orden: dto.orden });
-    if (exists) {
-      return res.status(400).json({ message: 'Ya existe un bloque con ese orden.' });
-    }
     const created = await createAbout(repo, dto);
     const response: AboutResponseDTO = { _id: created.props._id, titulo: created.props.titulo, descripcion: created.props.descripcion, orden: created.props.orden };
     res.status(201).json(response);
@@ -42,13 +36,6 @@ export class AboutController {
 
   static async update(req: Request, res: Response) {
     const dto: Partial<AboutRequestDTO> = req.body;
-    // Validar unicidad de 'orden' (ignorando el propio bloque)
-    if (dto.orden !== undefined) {
-      const exists = await AboutModel.findOne({ orden: dto.orden, _id: { $ne: req.params.id } });
-      if (exists) {
-        return res.status(400).json({ message: 'Ya existe un bloque con ese orden.' });
-      }
-    }
     const updated = await updateAbout(repo, req.params.id, dto);
     if (!updated) return res.status(404).json({ message: 'No se encontró la sección para actualizar.' });
     const response: AboutResponseDTO = { _id: updated.props._id, titulo: updated.props.titulo, descripcion: updated.props.descripcion, orden: updated.props.orden };
