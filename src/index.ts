@@ -3,7 +3,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import { connectDB } from './config/db';
-import homeRoutes from './routes/Home.routes';
+import apiRoutes from './presentation/routes';
 import { notFoundHandler } from './middlewares/notFoundHandler';
 import { errorHandler } from './middlewares/errorHandler';
 import swaggerUi from 'swagger-ui-express';
@@ -25,7 +25,7 @@ const swaggerDocument = YAML.load('./src/docs/swagger.yaml');
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Rutas API
-app.use('/home', homeRoutes);
+app.use('/', apiRoutes);
 
 // Ruta raíz
 app.get('/', (_req, res) => {

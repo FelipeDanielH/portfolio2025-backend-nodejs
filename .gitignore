@@ -11,3 +11,4 @@ coverage/
 
 # Reportes de prueba temporales
 jest-output.json
+endpoints/

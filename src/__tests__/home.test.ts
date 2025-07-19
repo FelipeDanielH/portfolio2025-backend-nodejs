@@ -2,10 +2,10 @@ import request from 'supertest';
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import homeRoutes from '../routes/Home.routes';
-import { Home } from '../models/Home.model';
+import homeRoutes from '../presentation/routes/Home.routes';
+import { HomeModel } from '../infrastructure/models/Home.model';
 
-dotenv.config(); // Cargar variables de entorno
+dotenv.config();
 
 const app = express();
 app.use(express.json());
@@ -13,14 +13,11 @@ app.use('/home', homeRoutes);
 
 beforeAll(async () => {
   await mongoose.connect(process.env.MONGODB_URI!);
+  await HomeModel.deleteMany({});
 });
 
 afterAll(async () => {
-  await mongoose.connection.close();
-});
-
-beforeEach(async () => {
-  await Home.deleteMany(); // Limpiar base antes de cada test
+  await mongoose.disconnect();
 });
 
 describe('API /home', () => {
@@ -30,32 +27,31 @@ describe('API /home', () => {
     expect(res.body.message).toBeDefined();
   });
 
-  it('debe crear información de inicio con POST', async () => {
+  it('debe crear o actualizar información de inicio con PUT', async () => {
     const data = {
-      name: 'Felipe',
-      title: 'Full Stack Developer',
-      description: 'Desarrollador especializado en MERN.',
-      links: {
-        github: 'https://github.com/FelipeDanielH'
-      }
+      nombre: 'Felipe',
+      titulo: 'Full Stack Developer',
+      claim: '¡Construyo soluciones digitales!',
+      telefono: '+56912345678',
+      ubicacion: 'Santiago, Chile',
+      email: 'felipe@email.com',
+      linkedin: 'https://linkedin.com/in/felipe',
+      cv: 'https://cv.com/felipe',
+      boton_contacto: 'Contáctame'
     };
 
-    const res = await request(app).post('/home').send(data);
-    expect(res.statusCode).toBe(201);
-    expect(res.body.name).toBe('Felipe');
-    expect(res.body.title).toBe('Full Stack Developer');
+    const res = await request(app).put('/home').send(data);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.nombre).toBe('Felipe');
+    expect(res.body.titulo).toBe('Full Stack Developer');
+    expect(res.body.email).toBe('felipe@email.com');
   });
 
-  it('debe eliminar correctamente la información', async () => {
-    await new Home({
-      name: 'Felipe',
-      title: 'Developer',
-      description: '...',
-      links: {}
-    }).save();
-
-    const res = await request(app).delete('/home');
+  it('debe obtener la información de inicio con GET', async () => {
+    const res = await request(app).get('/home');
     expect(res.statusCode).toBe(200);
-    expect(res.body.message).toBe('Información de inicio eliminada correctamente');
+    expect(res.body.nombre).toBeDefined();
+    expect(res.body.titulo).toBeDefined();
+    expect(res.body.email).toBeDefined();
   });
 });
