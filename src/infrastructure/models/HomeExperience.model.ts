@@ -8,7 +8,6 @@ export interface IHomeExperienceSnapshot {
   fecha_inicio: string;
   fecha_fin?: string | null;
   descripcion: string;
-  orden: number;
 }
 
 export interface IHomeExperience extends Document {
@@ -22,8 +21,7 @@ const HomeExperienceSnapshotSchema = new Schema<IHomeExperienceSnapshot>({
   ubicacion: { type: String, required: true },
   fecha_inicio: { type: String, required: true },
   fecha_fin: { type: String, default: null },
-  descripcion: { type: String, required: true },
-  orden: { type: Number, required: true }
+  descripcion: { type: String, required: true }
 }, { _id: false });
 
 const HomeExperienceSchema = new Schema<IHomeExperience>({

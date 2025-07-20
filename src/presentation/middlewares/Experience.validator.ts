@@ -6,7 +6,6 @@ export const validateExperience = [
   body('ubicacion').notEmpty().withMessage('La ubicación es obligatoria'),
   body('fecha_inicio').notEmpty().withMessage('La fecha de inicio es obligatoria'),
   body('descripcion').notEmpty().withMessage('La descripción es obligatoria'),
-  body('orden').isInt().withMessage('El orden debe ser un número entero'),
   body('modalidad').optional().isIn(['Remoto', 'Presencial', 'Híbrido']),
   body('equipo').optional().isString(),
   body('sector').optional().isString(),

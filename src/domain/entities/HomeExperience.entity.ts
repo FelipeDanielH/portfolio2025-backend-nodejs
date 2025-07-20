@@ -6,7 +6,6 @@ export interface HomeExperienceSnapshot {
   fecha_inicio: string;
   fecha_fin?: string | null;
   descripcion: string;
-  orden: number;
 }
 
 export interface HomeExperienceProps {

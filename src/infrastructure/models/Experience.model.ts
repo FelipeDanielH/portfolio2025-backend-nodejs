@@ -13,7 +13,6 @@ export interface IExperience extends Document {
   responsabilidades?: string[];
   logros?: string[];
   tecnologias?: string[];
-  orden: number;
 }
 
 const ExperienceSchema = new Schema<IExperience>({
@@ -28,8 +27,7 @@ const ExperienceSchema = new Schema<IExperience>({
   descripcion: { type: String, required: true },
   responsabilidades: { type: [String], default: [] },
   logros: { type: [String], default: [] },
-  tecnologias: { type: [String], default: [] },
-  orden: { type: Number, required: true }
+  tecnologias: { type: [String], default: [] }
 }, { timestamps: true });
 
 export const ExperienceModel = model<IExperience>('Experience', ExperienceSchema);

@@ -29,8 +29,7 @@ export class HomeExperienceController {
       ubicacion: e.ubicacion,
       fecha_inicio: e.fecha_inicio,
       fecha_fin: e.fecha_fin,
-      descripcion: e.descripcion,
-      orden: e.orden
+      descripcion: e.descripcion
     }));
     const updated = await updateHomeExperience(repo, snapshots);
     res.json({ experience: updated.props.experience });
