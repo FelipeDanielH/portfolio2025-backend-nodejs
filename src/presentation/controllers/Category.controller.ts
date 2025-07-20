@@ -4,7 +4,6 @@ import { getCategories } from '../../application/use-cases/categories/getCategor
 import { createCategory } from '../../application/use-cases/categories/createCategory';
 import { updateCategory } from '../../application/use-cases/categories/updateCategory';
 import { deleteCategory } from '../../application/use-cases/categories/deleteCategory';
-import { CategoryModel } from '../../infrastructure/models/Category.model';
 
 const repo = new CategoryRepositoryImpl();
 
@@ -28,11 +27,6 @@ export class CategoryController {
 
   static async create(req: Request, res: Response) {
     const dto: CategoryRequestDTO = req.body;
-    // Validar unicidad de 'orden'
-    const exists = await CategoryModel.findOne({ orden: dto.orden });
-    if (exists) {
-      return res.status(400).json({ message: 'Ya existe una categoría con ese orden.' });
-    }
     const created = await createCategory(repo, dto);
     const response: CategoryResponseDTO = { _id: created.props._id, nombre: created.props.nombre, orden: created.props.orden };
     res.status(201).json(response);
@@ -40,13 +34,6 @@ export class CategoryController {
 
   static async update(req: Request, res: Response) {
     const dto: Partial<CategoryRequestDTO> = req.body;
-    // Validar unicidad de 'orden' (ignorando la propia categoría)
-    if (dto.orden !== undefined) {
-      const exists = await CategoryModel.findOne({ orden: dto.orden, _id: { $ne: req.params.id } });
-      if (exists) {
-        return res.status(400).json({ message: 'Ya existe una categoría con ese orden.' });
-      }
-    }
     const updated = await updateCategory(repo, req.params.id, dto);
     if (!updated) return res.status(404).json({ message: 'Categoría no encontrada.' });
     const response: CategoryResponseDTO = { _id: updated.props._id, nombre: updated.props.nombre, orden: updated.props.orden };
